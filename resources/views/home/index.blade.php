@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Website Resmi Desa Wargaluyu | HOME</title>
+  <title>Website Desa Wargaluyu | HOME</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/img/logo.png" rel="icon">
+  <!-- <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon"> -->
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -42,7 +42,7 @@
   <header id="header" class="top">
     <div class="container d-flex align-items-center">
 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="">Desa Wargaluyu</a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="">Desa</a>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <h1 class="logo me-auto"><a href="index.html">Medicio</a></h1> -->
 
@@ -120,7 +120,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Berita Website Resmi Desa Wargaluyu</h2>
+          <h2>Berita Website Desa Wargaluyu</h2>
         </div>
 
         <div class="row">
@@ -148,7 +148,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Perangkat Website Resmi Desa Wargaluyu</h2>
+          <h2>Perangkat Website Desa Wargaluyu</h2>
         </div>
 
         <div class="row">
@@ -178,7 +178,7 @@
       <div class="container" data-aos="zoom-in">
 
         <div class="text-center">
-          <h3>Sejarah Website Resmi Desa Wargaluyu</h3>
+          <h3>Sejarah Website Desa Wargaluyu</h3>
           <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
           <a class="cta-btn scrollto" href="/sejarah">Lihat detail</a>
         </div>
@@ -215,7 +215,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Data Website Resmi Desa Wargaluyu</h2>
+          <h2>Data Website Desa Wargaluyu</h2>
         </div>
 
         <div class="row">
@@ -273,7 +273,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Informasi Layanan Website Resmi Desa Wargaluyu</h2>
+          <h2>Informasi Layanan Website Desa Wargaluyu</h2>
         </div>
 
         <div class="row">
@@ -297,15 +297,21 @@
     <section id="services" class="services services">
       <div class="container" data-aos="fade-up">
         <div class="section-title">
-          <h2>UMKM Website Resmi Desa Wargaluyu</h2>
+          <h2>UMKM Website Desa Wargaluyu</h2>
         </div>
         
         <div class="row">
         @foreach ($umkm as $umkm)
           <div class="col-lg-4 col-md-6 icon-box" data-aos="zoom-in" data-aos-delay="100">
           <img src="/image/{{$umkm->image}}" alt="" class="img-fluid" width="100">
-            <h4>{{$umkm->title}}</h4>
-            <p>{{$umkm->description}}</p>    
+            <h4>{{$umkm->title}}</h4> 
+            <p>
+              {{ \Illuminate\Support\Str::limit(strip_tags($umkm->description), 200, '...') }}
+            </p>
+          
+            <a href="{{ route('umkm.detail', $umkm->id) }}" class="btn btn-sm btn-primary">
+                Lihat Selengkapnya >
+            </a> 
           </div>
           @endforeach
         </div>
@@ -318,7 +324,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Galeri Website Resmi Desa Wargaluyu</h2>
+          <h2>Galeri Website Desa Wargaluyu</h2>
         </div>
 
         <div class="gallery-slider swiper">
@@ -352,7 +358,7 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="footer-info">
-              <h3>Desa Wargaluyu</h3>
+              <h3>Desa</h3>
               <p>
                 Kec. Leces <br>
                 Kab. Probolinggo<br><br>

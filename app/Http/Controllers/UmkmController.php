@@ -38,7 +38,15 @@ class UmkmController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required', 'description' => 'required', 'image' => 'required|image',
+            'title' => 'required',
+            'description' => 'required|max:500',
+            'image' => 'required|image',
+        ], [
+            'title.required' => 'Judul wajib diisi.',
+            'description.required' => 'Deskripsi wajib diisi.',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
+            'image.required' => 'Gambar wajib diunggah.',
+            'image.image' => 'File yang diunggah harus berupa gambar.',
         ]);
 
         $input = $request->all();
@@ -88,9 +96,17 @@ class UmkmController extends Controller
     public function update(Request $request, Umkm $umkm)
     {
         $request->validate([
-            'title' => 'required', 'description' => 'required', 'image' => 'image',
+            'title' => 'required',
+            'description' => 'required|max:500',
+            'image' => 'required|image',
+        ], [
+            'title.required' => 'Judul wajib diisi.',
+            'description.required' => 'Deskripsi wajib diisi.',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
+            'image.required' => 'Gambar wajib diunggah.',
+            'image.image' => 'File yang diunggah harus berupa gambar.',
         ]);
-
+        
         $input = $request->all();
 
         if ($image = $request->file('image')) {

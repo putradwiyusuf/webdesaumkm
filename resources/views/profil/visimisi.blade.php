@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Website Resmi Desa Wargaluyu - Beranda</title>
+  <title>Website Desa Wargaluyu - Beranda</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -73,7 +73,7 @@
               <li><a href="/aktekematian">Pembuatan Akte Kematian</a></li>
               <li><a href="/pindahdomisili">Prosedur Pindah Domisili</a></li>
               <li><a href="/izinkeramaian">Pembuatan Surat Izin Keramaian</a></li>
-              <li><a href="http://bphtb.probolinggokab.go.id/" target="_blank">Cek PBB</a></li>
+              <li><a href="#" target="_blank">Cek PBB</a></li>
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="/event">EVENT</a></li>
@@ -132,7 +132,7 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="footer-info">
-              <h3>Desa Wargaluyu</h3>
+              <h3>Desa</h3>
               <p>
                 Kec. Leces <br>
                 Kab. Probolinggo<br><br>

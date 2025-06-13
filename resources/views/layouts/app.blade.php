@@ -54,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
            <li class="nav-item">
-            <a href="dashboard" class="nav-link">
+             <a href="{{ url('/dashboard') }}" class="nav-link">
              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -72,61 +72,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/sliders" class="nav-link">
+                <a href="{{ url('/admin/sliders') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Sliders</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/news" class="nav-link">
+                <a href="{{ url('/admin/news') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Berita</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/sambutan" class="nav-link">
+                <a href="{{ url('/admin/sambutan') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sambutan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/data" class="nav-link">
+                <a href="{{ url('/admin/data') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Desa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/services" class="nav-link">
+                <a href="{{ url('/admin/services') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/umkm" class="nav-link">
+                <a href="{{ url('/admin/umkm') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                  <p>UMKM</p> 
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/testimoni" class="nav-link">
+                <a href="{{ url('/admin/testimoni') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Testimoni</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/perangkat" class="nav-link">
+                <a href="{{ url('/admin/perangkat') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Perangkat</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/galeri" class="nav-link">
+                <a href="{{ url('/admin/galeri') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Galery</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/event" class="nav-link">
+                <a href="{{ url('/admin/event') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Event</p>
                 </a>
@@ -135,7 +135,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @if(auth()->user()->level=="superadmin")
           <li class="nav-item">
-            <a href="/admin/user" class="nav-link">
+            <a href="{{ url('/admin/user') }}" class="nav-link">
              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Tambah User
@@ -231,5 +231,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/lte/dist/js/adminlte.min.js"></script>
+@stack('scripts')
 </body>
 </html>

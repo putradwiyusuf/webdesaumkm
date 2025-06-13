@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Website Resmi Desa Wargaluyu | PINDAH DOMISILI</title>
+    <title>Website Desa Wargaluyu | PINDAH DOMISILI</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -107,7 +107,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-info">
-                            <h3>Desa Wargaluyu</h3>
+                            <h3>Desa</h3>
                             <p>
                                 Kec. Leces <br>
                                 Kab. Probolinggo<br><br>

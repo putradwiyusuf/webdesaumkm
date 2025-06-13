@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -14,6 +15,7 @@ Route::get('/','\App\Http\Controllers\HomeController@index');
 
 Route::get('/event','\App\Http\Controllers\HomeController@event');
 Route::get('/umkm','\App\Http\Controllers\HomeController@umkm');
+Route::get('/umkm/{umkm}', [HomeController::class, 'umkmDetail'])->name('umkm.detail');
 Route::get('/galeri','\App\Http\Controllers\HomeController@galeri');
 Route::get('/datadesa','\App\Http\Controllers\HomeController@data');
 Route::get('/berita','\App\Http\Controllers\HomeController@news');

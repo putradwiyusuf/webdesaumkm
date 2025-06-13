@@ -42,7 +42,7 @@ class UserController extends Controller
         ]);
 
         $input = $request->all();
-       
+        
         User::create($input);
 
         return redirect('admin/user')->with('message', 'Data berhasil ditambahkan');

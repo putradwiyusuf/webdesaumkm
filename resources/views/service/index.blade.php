@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Layanan Website Resmi Desa Wargaluyu')
+@section('title', 'Data Layanan Website Desa Wargaluyu')
 
 @section('content')
 

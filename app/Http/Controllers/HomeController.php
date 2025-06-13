@@ -54,9 +54,15 @@ class HomeController extends Controller
     }
     
     public function umkm(){
-        $umkm = Umkm::all();
+        $umkm = Umkm::paginate(10);
         return view('home.umkm', compact('umkm'));
     }
+
+    public function umkmDetail(Umkm $umkm)
+    {
+        return view('home.umkmdetail', compact('umkm'));
+    }
+
     public function galeri(){
         $galeri = Galeri::all();
         return view('galeri.galeri',compact(

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Data UMKM Website Resmi Desa Wargaluyu')
+@section('title', 'Tambah Data UMKM Website Desa Wargaluyu')
 
 @section('content')
 
@@ -18,10 +18,19 @@
                 <small style="color:red">{{$message}}</small>
                 @enderror
                  <div class="form-group">
-                    <label for="">Deskripsi</label>
-                    <textarea name="description" id="" cols="30" rows="10" class="form-control" placeholder="Deskripsi"></textarea>
+                    <label for="description">Deskripsi</label>
+                    <textarea 
+                        name="description" 
+                        id="description" 
+                        cols="30" 
+                        rows="10" 
+                        class="form-control @error('description') is-invalid @enderror" 
+                        placeholder="Deskripsi"
+                        maxlength="500"
+                        oninput="updateCount()">{{ old('description') }}</textarea>
+                    <small id="charCount">0 / 500 karakter</small>
                 </div>
-                 @error('description')
+                @error('description')
                 <small style="color:red">{{$message}}</small>
                 @enderror
                  <div class="form-group">
@@ -40,3 +49,16 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    function updateCount() {
+        const textarea = document.getElementById('description');
+        const countDisplay = document.getElementById('charCount');
+        countDisplay.textContent = `${textarea.value.length} / 500 karakter`;
+    }
+
+    // Jalankan saat halaman dimuat agar count tetap muncul jika ada old value
+    document.addEventListener("DOMContentLoaded", updateCount);
+</script>
+@endpush
