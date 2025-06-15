@@ -26,7 +26,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('umkms', function (Blueprint $table) {
-            //
+            // Drop foreign key constraint
+            $table->dropForeign(['user_id']);
+            // Drop the user_id column
+            $table->dropColumn('user_id');
         });
     }
 };

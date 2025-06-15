@@ -12,7 +12,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="">Judul</label>
-                    <input type="text" class="form-control" name="title" placeholder="Judul">
+                    <input type="text" class="form-control" name="title" placeholder="Judul" value="{{ old('title') }}">
                 </div>
                 @error('title')
                 <small style="color:red">{{$message}}</small>

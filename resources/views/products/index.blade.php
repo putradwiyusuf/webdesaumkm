@@ -1,0 +1,114 @@
+@extends('layouts.app')
+
+@section('title','Data Produk')
+
+@section('content')
+
+<div class="container">
+    <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Tambah Produk</a>
+
+    <!-- {{-- Alert sukses --}} -->
+    @if ($message = Session::get('message'))
+        <div class="alert alert-success">
+            <strong>Berhasil!</strong> {{ $message }}
+        </div>
+    @endif
+
+    <!-- {{-- Form Filter --}} -->
+    <form method="GET" action="{{ route('products.index') }}" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="keyword" class="form-control" placeholder="Cari nama produk..." value="{{ request('keyword') }}">
+        </div>
+        <div class="col-md-4">
+            <select name="umkm_id" class="form-control">
+                <option value="">-- Semua UMKM --</option>
+                @foreach ($umkms as $umkm)
+                    <option value="{{ $umkm->id }}" {{ request('umkm_id') == $umkm->id ? 'selected' : '' }}>
+                        {{ $umkm->title }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <a href="{{ route('products.index') }}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    <!-- {{-- Tabel Produk --}} -->
+    <div class="table-responsive">
+        <form id="product-form" method="POST" action="{{ route('products.bulkDelete') }}">
+            @csrf
+            @method('DELETE')
+
+            <table class="table table-bordered table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="select-all">
+                        </th>
+                        <th>No</th>
+                        <th>Nama Produk</th>
+                        <th>UMKM</th>
+                        <th>Deskripsi</th>
+                        <th>Harga</th>
+                        <th>Gambar</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($products as $index => $product)
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="selected[]" value="{{ $product->id }}" class="select-item">
+                            </td>
+                            <td>{{ $products->firstItem() + $index }}</td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->umkm->title ?? '-' }}</td>
+                            <td>{{ $product->description }}</td>
+                            <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                            <td>
+                                @if ($product->image)
+                                    <img src="{{ asset('image/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid" width="80">
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm mt-1"
+                                        onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus Produk</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="8" class="text-center text-muted">Data produk tidak ditemukan.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            <!-- {{-- Tombol hapus massal --}} -->
+            <button type="submit" class="btn btn-danger mt-2"
+                onclick="return confirm('Hapus semua data yang dipilih?')">Bulk Delete</button>
+        </form>
+    </div>
+
+    <!-- {{-- Pagination --}} -->
+    <div class="d-flex justify-content-end mt-4">
+        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
+    </div>
+</div>
+
+@endsection
+
+@push('scripts')
+<script>
+    // Select all checkbox
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-item');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+</script>
+@endpush

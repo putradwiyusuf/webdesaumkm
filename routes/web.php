@@ -36,16 +36,19 @@ Route::middleware(['auth', 'ceklevel:admin,superadmin'])->group(function () {
     Route::resource('admin/news', \App\Http\Controllers\NewsController::class);
     Route::resource('admin/galeri', \App\Http\Controllers\GaleriController::class);
     Route::resource('admin/event', \App\Http\Controllers\EventController::class);
-    Route::resource('products', ProductController::class);
+    Route::resource('admin/products', ProductController::class);
+    Route::delete('admin/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('products.bulkDelete');
+    // Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+    // Route::get('/products/import', [ProductController::class, 'import'])->name('products.import');
 });
 
 Route::middleware(['auth', 'ceklevel:superadmin'])->group(function () {
     Route::resource('admin/user', \App\Http\Controllers\UserController::class);
 });
 
-Route::middleware(['auth', 'ceklevel:user'])->group(function () {
-    Route::resource('products', ProductController::class);
-});
+// Route::middleware(['auth', 'ceklevel:user'])->group(function () {
+//     Route::resource('admin/products', ProductController::class);
+// });
 
 Route::prefix('informasi')->group(function () {
     Route::view('/', 'home.informasi');
