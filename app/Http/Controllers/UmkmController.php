@@ -91,9 +91,12 @@ class UmkmController extends Controller
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function edit(Umkm $umkm)
+    public function edit($umkm)
     {
-        return view('umkm.edit', compact('umkm'));
+        $umkm = Umkm::findOrFail($umkm);
+        $users = User::where('level', 'user')->get(); // hanya ambil user biasa
+
+        return view('umkm.edit', compact('umkm', 'users'));
     }
 
     /**
@@ -103,35 +106,46 @@ class UmkmController extends Controller
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Umkm $umkm)
+    public function update(Request $request, $id)
     {
+        $umkm = Umkm::findOrFail($id);
+
         $request->validate([
             'title' => 'required',
             'description' => 'required|max:500',
-            'image' => 'required|image',
+            'user_id' => 'required|exists:users,id',
+            'image' => 'nullable|image',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'description.required' => 'Deskripsi wajib diisi.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
-            'image.required' => 'Gambar wajib diunggah.',
-            'image.image' => 'File yang diunggah harus berupa gambar.',
+            'user_id.required' => 'User tidak boleh kosong.',
+            'user_id.exists' => 'User tidak valid.',
+            'image.image' => 'File harus berupa gambar.',
         ]);
-        
-        $input = $request->all();
 
-        if ($image = $request->file('image')) {
+        $umkm->title = $request->title;
+        $umkm->description = $request->description;
+        $umkm->user_id = $request->user_id;
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($umkm->image && file_exists(public_path('image/' . $umkm->image))) {
+                unlink(public_path('image/' . $umkm->image));
+            }
+
+            $image = $request->file('image');
             $destinationPath = 'image/';
             $imageName = $image->getClientOriginalName();
-            $image->move($destinationPath, $imageName);
-            $input['image'] = $imageName;
-        } else {
-            unset($input['image']);
+            $image->move(public_path($destinationPath), $imageName);
+            $umkm->image = $imageName;
         }
 
-        $umkm->update($input);
+        $umkm->save();
 
-        return redirect('admin/umkm')->with('message', 'Data berhasil diedit');
+        return redirect()->route('umkm.index')->with('message', 'Data berhasil diupdate.');
     }
+
 
     /**
      * Remove the specified resource from storage.
