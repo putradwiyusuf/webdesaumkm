@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Umkm;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UmkmController extends Controller
@@ -26,7 +27,8 @@ class UmkmController extends Controller
      */
     public function create()
     {
-        return view('umkm.create');
+        $users = User::where('level', 'user')->get();
+        return view('umkm.create', compact('users'));
     }
 
     /**
@@ -41,15 +43,23 @@ class UmkmController extends Controller
             'title' => 'required',
             'description' => 'required|max:500',
             'image' => 'required|image',
+            'user_id' => 'required|exists:users,id',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'description.required' => 'Deskripsi wajib diisi.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
             'image.required' => 'Gambar wajib diunggah.',
             'image.image' => 'File yang diunggah harus berupa gambar.',
+            'user_id.required' => 'User tidak boleh kosong.',
+            'user_id.exists' => 'User tidak valid.',
         ]);
 
         $input = $request->all();
+
+        // Cek jika user sudah punya UMKM
+        // if (Umkm::where('user_id', $request->user_id)->exists()) {
+        //     return back()->withErrors(['user_id' => 'User ini sudah memiliki UMKM.'])->withInput();
+        // }
 
         if ($image = $request->file('image')) {
             $destinationPath = 'image/';

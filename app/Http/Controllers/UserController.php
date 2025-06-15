@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -36,14 +37,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',  'email' => 'required','level' => 'required','password' => 'required',
+    {    
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'level' => 'required',
+            'password' => 'required|string|min:8',
         ]);
 
-        $input = $request->all();
-        
-        User::create($input);
+        $validated['password'] = Hash::make($validated['password']);
+
+        User::create($validated);
 
         return redirect('admin/user')->with('message', 'Data berhasil ditambahkan');
     }

@@ -17,6 +17,17 @@
                 @error('title')
                 <small style="color:red">{{$message}}</small>
                 @enderror
+                <div class="form-group">
+                    <label for="user_id">User</label>
+                    <select name="user_id" id="user_id" class="form-control">
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach    
+                   </select>
+                </div>
+                @error('user_id')
+                <small style="color:red">{{$message}}</small>
+                @enderror
                  <div class="form-group">
                     <label for="description">Deskripsi</label>
                     <textarea 
@@ -26,9 +37,9 @@
                         rows="10" 
                         class="form-control @error('description') is-invalid @enderror" 
                         placeholder="Deskripsi"
-                        maxlength="500"
+                        maxlength="250"
                         oninput="updateCount()">{{ old('description') }}</textarea>
-                    <small id="charCount">0 / 500 karakter</small>
+                    <small id="charCount">0 / 250 karakter</small>
                 </div>
                 @error('description')
                 <small style="color:red">{{$message}}</small>
@@ -55,7 +66,7 @@
     function updateCount() {
         const textarea = document.getElementById('description');
         const countDisplay = document.getElementById('charCount');
-        countDisplay.textContent = `${textarea.value.length} / 500 karakter`;
+        countDisplay.textContent = `${textarea.value.length} / 250 karakter`;
     }
 
     // Jalankan saat halaman dimuat agar count tetap muncul jika ada old value

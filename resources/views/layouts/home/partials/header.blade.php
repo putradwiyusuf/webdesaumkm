@@ -1,6 +1,6 @@
 <header id="header" class="fixed-top">
   <div class="container d-flex align-items-center">
-    <a href="/" class="logo me-auto"><img src="{{asset('assets/img/logo.png')}}" alt=""></a>
+    <a href="/" class="logo me-auto"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
     <nav id="navbar" class="navbar order-last order-lg-0">
       <ul>
         <li><a class="nav-link scrollto" href="/">HOME</a></li>

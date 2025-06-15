@@ -12,7 +12,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="">Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Nama">
+                    <input type="text" class="form-control" name="name" placeholder="Nama" value="{{ old('name') }}">
                 </div>
                 @error('name')
                 <small style="color:red">{{$message}}</small>
@@ -21,8 +21,8 @@
                     <label for="level">Level</label>
                     <select name="level" id="level" class="form-control">
                         <option value="">-- Pilih Level --</option>
-                        <option value="admin">Admin</option>
-                        <option value="umkm">UMKM</option>
+                        <option value="admin" {{ old('level') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ old('level') == 'user' ? 'selected' : '' }}>User</option>
                     </select>
                 </div>
                  @error('level')
@@ -30,7 +30,7 @@
                 @enderror
                  <div class="form-group">
                     <label for="">Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="Email">
+                    <input type="text" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}">
                 </div>
                  @error('email')
                 <small style="color:red">{{$message}}</small>

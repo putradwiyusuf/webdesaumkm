@@ -62,6 +62,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           
+          @if(auth()->user()->level=="user")
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                MENU
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>UMKM SAYA</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/product') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Produk UMKM</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @else
           <li class="nav-item menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -108,6 +133,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ url('/produk') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Produk UMKM</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('/admin/testimoni') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Testimoni</p>
@@ -133,10 +164,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
             </ul>
           </li>
+          @endif
           @if(auth()->user()->level=="superadmin")
           <li class="nav-item">
             <a href="{{ url('/admin/user') }}" class="nav-link">
-             <i class="nav-icon fas fa-tachometer-alt"></i>
+            <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Tambah User
               </p>
