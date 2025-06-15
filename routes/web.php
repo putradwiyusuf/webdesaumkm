@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 
-// Halaman publik
+// Halaman public
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'index']);
 Route::get('/contact', [HomeController::class, 'index']);
@@ -22,7 +22,7 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticated']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
-// Semua level bisa akses, nanti cek level di controllernya
+// Halaman dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
 
 Route::middleware(['auth', 'ceklevel:admin,superadmin'])->group(function () {
@@ -48,6 +48,7 @@ Route::middleware(['auth', 'ceklevel:user'])->group(function () {
 });
 
 Route::prefix('informasi')->group(function () {
+    Route::view('/', 'home.informasi');
     Route::view('/beranda', 'home.index');
     Route::view('/kk', 'home.kk');
     Route::view('/aktekelahiran', 'home.aktekelahiran');
