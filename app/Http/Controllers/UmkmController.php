@@ -100,6 +100,64 @@ class UmkmController extends Controller
     }
 
     /**
+     * Update the specified resource in storage by user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function editByUser()
+    {
+        $umkm = Umkm::where('user_id', auth()->id())->firstOrFail();
+        $users = User::where('id', auth()->id())->get(); // hanya ambil user biasa
+        return view('umkm.edit', compact('umkm','users'));
+    }
+    /**
+     * Update the specified resource in storage by user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateByUser(Request $request)
+    {
+        $umkm = Umkm::where('user_id', auth()->id())->firstOrFail();
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required|max:500',
+            'user_id' => 'required|exists:users,id',
+            'image' => 'nullable|image',
+        ], [
+            'title.required' => 'Judul wajib diisi.',
+            'description.required' => 'Deskripsi wajib diisi.',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
+            'user_id.required' => 'User tidak boleh kosong.',
+            'user_id.exists' => 'User tidak valid.',
+            'image.image' => 'File harus berupa gambar.',
+        ]);
+
+        $umkm->title = $request->title;
+        $umkm->description = $request->description;
+        $umkm->user_id = $request->user_id;
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($umkm->image && file_exists(public_path('image/' . $umkm->image))) {
+                unlink(public_path('image/' . $umkm->image));
+            }
+
+            $image = $request->file('image');
+            $destinationPath = 'image/';
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path($destinationPath), $imageName);
+            $umkm->image = $imageName;
+        }
+
+        $umkm->save();
+
+        return redirect()->route('dashboard')->with('message', 'Data berhasil diupdate.');
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

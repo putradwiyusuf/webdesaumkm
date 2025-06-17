@@ -24,7 +24,10 @@ class HomeController extends Controller
         $event = Event::all();
         $news = News::all();
         $perangkat = Perangkat::all();
-        $umkm = Umkm::all();
+        $umkm = Umkm::with(['products' => function ($q) {
+            $q->orderByDesc('click_count');
+            $q->take(3);
+        }])->get();
         $data = Data::all();
         $galeri = Galeri::all();
         $sambutan = Sambutan::all();
@@ -43,6 +46,7 @@ class HomeController extends Controller
             'sambutan',
             'service',
             'testimoni',
+            'product'
 
         ));
             

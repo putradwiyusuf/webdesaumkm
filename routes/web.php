@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UmkmController;
 
 // Halaman public
 Route::get('/', [HomeController::class, 'index']);
@@ -29,30 +30,35 @@ Route::get('/logout', [AuthController::class, 'logout']);
 // Halaman dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
 
-Route::middleware(['auth', 'ceklevel:admin,superadmin'])->group(function () {
-    Route::resource('admin/sliders', \App\Http\Controllers\SliderController::class);
-    Route::resource('admin/services', \App\Http\Controllers\ServiceController::class);
-    Route::resource('admin/umkm', \App\Http\Controllers\UmkmController::class);
-    Route::resource('admin/perangkat', \App\Http\Controllers\PerangkatController::class);
-    Route::resource('admin/sambutan', \App\Http\Controllers\SambutanController::class);
-    Route::resource('admin/data', \App\Http\Controllers\DataController::class);
-    Route::resource('admin/testimoni', \App\Http\Controllers\TestimoniController::class);
-    Route::resource('admin/news', \App\Http\Controllers\NewsController::class);
-    Route::resource('admin/galeri', \App\Http\Controllers\GaleriController::class);
-    Route::resource('admin/event', \App\Http\Controllers\EventController::class);
-    Route::resource('admin/products', ProductController::class);
-    Route::delete('admin/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('products.bulkDelete');
-    // Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
-    // Route::get('/products/import', [ProductController::class, 'import'])->name('products.import');
+// Route untuk semua level yang login: superadmin, admin, user
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::resource('products', ProductController::class);
+    Route::delete('products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('products.bulkDelete');
 });
 
-Route::middleware(['auth', 'ceklevel:superadmin'])->group(function () {
-    Route::resource('admin/user', \App\Http\Controllers\UserController::class);
+// Hanya untuk admin & superadmin
+Route::middleware(['auth', 'ceklevel:admin,superadmin'])->prefix('admin')->group(function () {
+    Route::resource('sliders', \App\Http\Controllers\SliderController::class);
+    Route::resource('services', \App\Http\Controllers\ServiceController::class);
+    Route::resource('umkm', UmkmController::class);
+    Route::resource('perangkat', \App\Http\Controllers\PerangkatController::class);
+    Route::resource('sambutan', \App\Http\Controllers\SambutanController::class);
+    Route::resource('data', \App\Http\Controllers\DataController::class);
+    Route::resource('testimoni', \App\Http\Controllers\TestimoniController::class);
+    Route::resource('news', \App\Http\Controllers\NewsController::class);
+    Route::resource('galeri', \App\Http\Controllers\GaleriController::class);
+    Route::resource('event', \App\Http\Controllers\EventController::class);
 });
 
-// Route::middleware(['auth', 'ceklevel:user'])->group(function () {
-//     Route::resource('admin/products', ProductController::class);
-// });
+// Hanya untuk superadmin
+Route::middleware(['auth', 'ceklevel:superadmin'])->prefix('admin')->group(function () {
+    Route::resource('user', \App\Http\Controllers\UserController::class);
+});
+
+Route::middleware(['auth', 'ceklevel:user'])->prefix('user')->group(function () {
+    Route::get('/umkm/edit', [UmkmController::class, 'editByUser'])->name('umkm.user.edit');
+    Route::put('/umkm/update', [UmkmController::class, 'updateByUser'])->name('umkm.user.update');
+});
 
 Route::prefix('informasi')->group(function () {
     Route::view('/', 'home.informasi');

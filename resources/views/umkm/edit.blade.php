@@ -4,22 +4,31 @@
 
 @section('content')
 
+@php $user = auth()->user(); @endphp
 <div class="container">
+                @if ($user->level === 'user')
+    <a href="{{ url('/dashboard') }}" class="btn btn-primary mb-3">Kembali</a>
+                @else
     <a href="/admin/umkm" class="btn btn-primary mb-3">Kembali</a>
+    @endif
     <div class="row">
         <div class="col-md-12">
             <form action="{{ route('umkm.update', $umkm->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label for="title">Judul</label>
-                    <input type="text" class="form-control" name="title" placeholder="Judul"
+                    <label for="title">Nama UMKM</label>
+                    <input type="text" class="form-control" name="title" placeholder="Nama UMKM"
                         value="{{ old('title', $umkm->title) }}">
                 </div>
                 @error('title')
                 <small style="color:red">{{ $message }}</small>
                 @enderror
+                
 
+                @if ($user->level === 'user')
+                <input type="hidden" name="user_id" value="{{ $user->id ?? '' }}">
+                @else
                 <div class="form-group">
                     <label for="user_id">User</label>
                     <select name="user_id" id="user_id" class="form-control">
@@ -33,6 +42,7 @@
                 @error('user_id')
                 <small style="color:red">{{ $message }}</small>
                 @enderror
+                @endif
 
                 <div class="form-group">
                     <label for="description">Deskripsi</label>

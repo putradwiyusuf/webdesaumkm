@@ -1,6 +1,13 @@
 <header id="header" class="fixed-top">
-  <div class="container d-flex align-items-center">
-    <a href="/" class="logo me-auto"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
+  <div class="container d-flex align-items-center justify-content-between">
+    
+    <!-- Logo dan Judul -->
+    <a href="/" class="d-flex align-items-center text-decoration-none">
+      <img src="{{ asset('assets/img/logo.png') }}" alt="" style="height: 40px;" class="me-2">
+      <h2 class="m-0 text-primary" style="font-size: 20px;">Website UMKM Desa Wargaluyu</h2>
+    </a>
+
+    <!-- Navbar -->
     <nav id="navbar" class="navbar order-last order-lg-0">
       <ul>
         <li><a class="nav-link scrollto" href="/">HOME</a></li>
@@ -23,7 +30,6 @@
             <li><a href="{{ url('/informasi/aktekematian') }}">Pembuatan Akte Kematian</a></li>
             <li><a href="{{ url('/informasi/pindahdomisili') }}">Prosedur Pindah Domisili</a></li>
             <li><a href="{{ url('/informasi/izinkeramaian') }}">Pembuatan Surat Izin Keramaian</a></li>
-            <li><a href="http://bphtb.probolinggokab.go.id/" target="_blank">Cek PBB</a></li>
           </ul>
         </li>
         <li><a class="nav-link scrollto" href="{{ url('/event') }}">EVENT</a></li>
@@ -33,5 +39,6 @@
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav>
+
   </div>
 </header>

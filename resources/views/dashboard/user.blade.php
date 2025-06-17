@@ -9,6 +9,10 @@
     @endphp
 
     @if ($umkm)
+        @php
+            $totalProduk = \App\Models\Product::where('umkm_id', $umkm->id)->count();
+        @endphp
+
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -18,7 +22,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $umkm->title }}</h5>
                         <p class="card-text">{{ $umkm->description }}</p>
-                        <a href="{{ route('umkm.index') }}" class="btn btn-primary">Kelola UMKM</a>
+                        <p class="card-text"><strong>Total Produk:</strong> {{ $totalProduk }}</p>
+                        <a href="{{ route('umkm.user.edit', $umkm->id) }}" class="btn btn-primary">Edit Profil UMKM</a>
                     </div>
                 </div>
             </div>

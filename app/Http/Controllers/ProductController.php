@@ -10,8 +10,17 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with('umkm');
+        $user = auth()->user();
+        $query = Product::query()->with('umkm');
 
+        // Superadmin dan admin bisa lihat semua
+        if ($user->level === 'user') {
+            $query->whereHas('umkm', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        // Optional: filter keyword & umkm_id
         if ($request->filled('keyword')) {
             $query->where('name', 'like', '%' . $request->keyword . '%');
         }
@@ -20,16 +29,21 @@ class ProductController extends Controller
             $query->where('umkm_id', $request->umkm_id);
         }
 
-        $products = $query->latest()->paginate(20)->withQueryString();
-        $umkms = Umkm::all(); // untuk filter dropdown
+        $products = $query->latest()->paginate(10)->withQueryString();
+            // $umkms = Umkm::all(); // untuk filter dropdown
+
+        // UMKM hanya ditampilkan jika admin atau superadmin
+        $umkms = $user->level === 'user'? $user->umkms : Umkm::all();
 
         return view('products.index', compact('products', 'umkms'));
     }
 
-
     public function create()
     {
-        $umkms = Umkm::all();
+        $user = auth()->user();
+
+        $umkms = $user->level === 'user'
+            ? $user->umkms : Umkm::all();
         return view('products.create', compact('umkms'));
     }
 

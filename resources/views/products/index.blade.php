@@ -19,7 +19,7 @@
         <div class="col-md-4">
             <input type="text" name="keyword" class="form-control" placeholder="Cari nama produk..." value="{{ request('keyword') }}">
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <select name="umkm_id" class="form-control">
                 <option value="">-- Semua UMKM --</option>
                 @foreach ($umkms as $umkm)
@@ -28,7 +28,19 @@
                     </option>
                 @endforeach
             </select>
-        </div>
+        </div> -->
+        @if(auth()->user()->level !== 'user')
+            <div class="col-md-4">
+                <select name="umkm_id" class="form-control">
+                    <option value="">-- Semua UMKM --</option>
+                    @foreach ($umkms as $umkm)
+                        <option value="{{ $umkm->id }}" {{ request('umkm_id') == $umkm->id ? 'selected' : '' }}>
+                            {{ $umkm->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
         <div class="col-md-4 d-flex gap-2">
             <button type="submit" class="btn btn-primary w-100">Filter</button>
             <a href="{{ route('products.index') }}" class="btn btn-secondary">Reset</a>

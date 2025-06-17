@@ -35,26 +35,67 @@
 
 <main id="main">
 
-  <!-- ======= Featured Services Section ======= -->
+  <!-- =======  UMKM  ======= -->
   <section id="featured-services" class="featured-services">
     <div class="container" data-aos="fade-up">
 
       <div class="section-title">
-        <h2>Berita Website Desa Wargaluyu</h2>
+        <h2>Produk Unggulan UMKM</h2>
+      </div>
+      @foreach($umkm as $u)
+      @if($u->products->count())
+      <h4 class="mt-4">{{ $u->title }}</h4>
+      <div class="row">
+        @foreach($u->products->take(3) as $product)
+        <div class="col-md-3 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+          <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+            <a href="{{ route('product.show', $product->id) }}" onclick="increaseClick('{{ $product->id }}')">
+              <div class="member-img">
+                <img src="{{ asset('image/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                <!-- Jumlah klik di pojok kanan bawah -->
+                <span class="position-absolute bottom-0 end-0 bg-dark text-white px-2 py-1 small rounded-start">
+                  {{ $product->click_count }} klik
+                </span>
+                <div class="">
+                  <h5 class="title font-weight-bold text-warning">{{ $product->name }}</h5>
+                  <p class="description">{{ $product->description }}</p>
+                  <div class="mt-auto">
+                    <span class="text-danger font-weight-bold h6">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                  </div>
+                </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      @endforeach
+    </div>
+    <div class="text-end mt-2">
+      <a href="{{ route('umkm.detail', $u->id) }}" class="btn btn-sm btn-outline-primary">
+        Lihat semua produk dari {{ $u->title }} >
+      </a>
+    </div>
+    @endif
+    @endforeach
+  </section>
+  <!-- End UMKM Section -->
+
+  <!-- ======= Counts Section ======= -->
+  <section id="featured-services" class="featured-services">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Data Website Desa Wargaluyu</h2>
       </div>
 
       <div class="row">
-        @foreach ($news as $news)
-        <div class="col-md-3 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-          <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="member-img">
-              <img src="/image/{{$news->image}}" alt="" class="img-fluid">
+        @foreach ($data as $data)
+        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+          <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon">
+              <img src="/image/{{$data->image}}" alt="" class="img-fluid" width="80">
             </div>
-            <br>
-            <div class="text-center">
-              <h4>{{$news->title}}</h4>
-            </div>
-            <p class="description">{{$news->description}}</p>
+            <h4>{{$data->title}}</h4>
+            <p class="description">{{$data->description}}</p>
           </div>
         </div>
         @endforeach
@@ -63,42 +104,13 @@
     </div>
   </section><!-- End Featured Services Section -->
 
-  <!-- ======= Doctors Section ======= -->
-  <section id="doctors" class="doctors section-bg">
-    <div class="container" data-aos="fade-up">
-
-      <div class="section-title">
-        <h2>Perangkat Website Desa Wargaluyu</h2>
-      </div>
-
-      <div class="row">
-        @foreach ($perangkat as $perangkat)
-        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-          <div class="member" data-aos="fade-up" data-aos-delay="100">
-            <div class="member-img">
-              <img src="/image/{{$perangkat->image}}" class="img-fluid" alt="">
-            </div>
-            <div class="member-info">
-              <h4>{{$perangkat->title}}</h4>
-              <span>{{$perangkat->description}}</span>
-            </div>
-          </div>
-        </div>
-        @endforeach
-
-
-      </div>
-
-    </div>
-  </section><!-- End Doctors Section -->
-
 
   <!-- ======= Cta Section ======= -->
   <section id="cta" class="cta">
     <div class="container" data-aos="zoom-in">
 
       <div class="text-center">
-        <h3>Sejarah Website Desa Wargaluyu</h3>
+        <h3>Sejarah Desa Wargaluyu</h3>
         <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
         <a class="cta-btn scrollto" href="/sejarah">Lihat detail</a>
       </div>
@@ -130,30 +142,6 @@
     </div>
   </section><!-- End About Us Section -->
 
-  <!-- ======= Counts Section ======= -->
-  <section id="featured-services" class="featured-services">
-    <div class="container" data-aos="fade-up">
-
-      <div class="section-title">
-        <h2>Data Website Desa Wargaluyu</h2>
-      </div>
-
-      <div class="row">
-        @foreach ($data as $data)
-        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-          <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon">
-              <img src="/image/{{$data->image}}" alt="" class="img-fluid" width="80">
-            </div>
-            <h4>{{$data->title}}</h4>
-            <p class="description">{{$data->description}}</p>
-          </div>
-        </div>
-        @endforeach
-      </div>
-
-    </div>
-  </section><!-- End Featured Services Section -->
 
   <!-- ======= Features Section ======= -->
 
@@ -188,12 +176,41 @@
     </div>
   </section><!-- End Features Section -->
 
+  <!-- ======= Perangkat Section ======= -->
+  <section id="doctors" class="doctors section-bg">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Perangkat Desa Wargaluyu</h2>
+      </div>
+
+      <div class="row">
+        @foreach ($perangkat as $perangkat)
+        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <div class="member" data-aos="fade-up" data-aos-delay="100">
+            <div class="member-img">
+              <img src="/image/{{$perangkat->image}}" class="img-fluid" alt="">
+            </div>
+            <div class="member-info">
+              <h4>{{$perangkat->title}}</h4>
+              <span>{{$perangkat->description}}</span>
+            </div>
+          </div>
+        </div>
+        @endforeach
+
+
+      </div>
+
+    </div>
+  </section><!-- End Perangkat Section -->
+
   <!-- ======= Services Section ======= -->
   <section id="services" class="services services">
     <div class="container" data-aos="fade-up">
 
       <div class="section-title">
-        <h2>Informasi Layanan Website Desa Wargaluyu</h2>
+        <h2>Informasi Layanan Desa Wargaluyu</h2>
       </div>
 
       <div class="row">
@@ -213,8 +230,37 @@
     </div>
   </section><!-- End Featured Services Section -->
 
+
+  <!-- ======= Featured Services Section ======= -->
+  <section id="featured-services" class="featured-services">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Berita Desa Wargaluyu</h2>
+      </div>
+
+      <div class="row">
+        @foreach ($news as $news)
+        <div class="col-md-3 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+          <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+            <div class="member-img">
+              <img src="/image/{{$news->image}}" alt="" class="img-fluid">
+            </div>
+            <br>
+            <div class="text-center">
+              <h4>{{$news->title}}</h4>
+            </div>
+            <p class="description">{{$news->description}}</p>
+          </div>
+        </div>
+        @endforeach
+      </div>
+
+    </div>
+  </section><!-- End Featured Services Section -->
+
   <!-- ======= Services Section ======= -->
-  <section id="services" class="services services">
+  <!-- <section id="services" class="services services">
     <div class="container" data-aos="fade-up">
       <div class="section-title">
         <h2>UMKM Website Desa Wargaluyu</h2>
@@ -237,14 +283,15 @@
       </div>
 
     </div>
-  </section><!-- End Services Section -->
+  </section> -->
+  <!-- End Services Section -->
 
   <!-- ======= Gallery Section ======= -->
   <section id="gallery" class="gallery">
     <div class="container" data-aos="fade-up">
 
       <div class="section-title">
-        <h2>Galeri Website Desa Wargaluyu</h2>
+        <h2>Galeri Desa Wargaluyu</h2>
       </div>
 
       <div class="gallery-slider swiper">
@@ -270,3 +317,18 @@
 
 </main><!-- End #main -->
 @endsection
+
+
+@push('scripts')
+<script>
+  function increaseClick(id) {
+    fetch(`/product/${id}/click`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+</script>
+@endpush
