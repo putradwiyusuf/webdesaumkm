@@ -9,7 +9,7 @@ class Umkm extends Model
 {
     use HasFactory;
     protected $fillable =[
-        'title', 'description', 'image', 'user_id'
+        'title', 'description', 'image', 'user_id', 'phone'
     ];
 
     public function user()

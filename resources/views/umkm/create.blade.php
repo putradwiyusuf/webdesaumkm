@@ -20,22 +20,29 @@
                 <div class="form-group">
                     <label for="user_id">User</label>
                     <select name="user_id" id="user_id" class="form-control">
-                    @foreach ($users as $user)
+                        @foreach ($users as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach    
-                   </select>
+                        @endforeach
+                    </select>
                 </div>
                 @error('user_id')
                 <small style="color:red">{{$message}}</small>
                 @enderror
-                 <div class="form-group">
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input type="text" class="form-control" name="phone" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}">
+                </div>
+                @error('phone')
+                <small style="color:red">{{ $message }}</small>
+                @enderror
+                <div class="form-group">
                     <label for="description">Deskripsi</label>
-                    <textarea 
-                        name="description" 
-                        id="description" 
-                        cols="30" 
-                        rows="10" 
-                        class="form-control @error('description') is-invalid @enderror" 
+                    <textarea
+                        name="description"
+                        id="description"
+                        cols="30"
+                        rows="10"
+                        class="form-control @error('description') is-invalid @enderror"
                         placeholder="Deskripsi"
                         maxlength="250"
                         oninput="updateCount()">{{ old('description') }}</textarea>
@@ -44,11 +51,11 @@
                 @error('description')
                 <small style="color:red">{{$message}}</small>
                 @enderror
-                 <div class="form-group">
+                <div class="form-group">
                     <label for="">Gambar</label>
-                    <input type="file" class="form-control" name="image" >
+                    <input type="file" class="form-control" name="image">
                 </div>
-                 @error('image')
+                @error('image')
                 <small style="color:red">{{$message}}</small>
                 @enderror
                 <div class="form-group">

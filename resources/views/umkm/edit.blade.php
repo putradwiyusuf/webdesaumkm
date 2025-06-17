@@ -6,14 +6,14 @@
 
 @php $user = auth()->user(); @endphp
 <div class="container">
-                @if ($user->level === 'user')
+    @if ($user->level === 'user')
     <a href="{{ url('/dashboard') }}" class="btn btn-primary mb-3">Kembali</a>
-                @else
+    @else
     <a href="/admin/umkm" class="btn btn-primary mb-3">Kembali</a>
     @endif
     <div class="row">
         <div class="col-md-12">
-            <form action="{{ route('umkm.update', $umkm->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ $user->level === 'user' ? route('umkm.user.update', $umkm->id) : route('umkm.update', $umkm->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -24,7 +24,7 @@
                 @error('title')
                 <small style="color:red">{{ $message }}</small>
                 @enderror
-                
+
 
                 @if ($user->level === 'user')
                 <input type="hidden" name="user_id" value="{{ $user->id ?? '' }}">
@@ -33,9 +33,9 @@
                     <label for="user_id">User</label>
                     <select name="user_id" id="user_id" class="form-control">
                         @foreach ($users as $user)
-                            <option value="{{ $user->id }}" {{ $user->id == $umkm->user_id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
+                        <option value="{{ $user->id }}" {{ $user->id == $umkm->user_id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -43,7 +43,13 @@
                 <small style="color:red">{{ $message }}</small>
                 @enderror
                 @endif
-
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input type="number" class="form-control" name="phone" placeholder="08xxxxxxxxxx" value="{{ old('phone', $umkm->phone) }}">
+                </div>
+                @error('phone')
+                <small style="color:red">{{ $message }}</small>
+                @enderror
                 <div class="form-group">
                     <label for="description">Deskripsi</label>
                     <textarea name="description" id="description" cols="30" rows="10"
@@ -60,7 +66,7 @@
                     <label for="image">Gambar (kosongkan jika tidak ingin ganti)</label>
                     <input type="file" class="form-control" name="image">
                     @if($umkm->image)
-                        <img src="{{ asset('image/' . $umkm->image) }}" alt="" width="100" class="mt-2">
+                    <img src="{{ asset('image/' . $umkm->image) }}" alt="" width="100" class="mt-2">
                     @endif
                 </div>
                 @error('image')

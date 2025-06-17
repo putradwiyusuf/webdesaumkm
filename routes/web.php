@@ -28,7 +28,7 @@ Route::post('/login', [AuthController::class, 'authenticated']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
 // Halaman dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth']);
 
 // Route untuk semua level yang login: superadmin, admin, user
 Route::middleware(['auth'])->prefix('admin')->group(function () {

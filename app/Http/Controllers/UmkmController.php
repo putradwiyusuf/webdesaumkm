@@ -42,16 +42,18 @@ class UmkmController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required|max:500',
-            'image' => 'required|image',
             'user_id' => 'required|exists:users,id',
+            'phone' => 'required|numeric',
+            'image' => 'nullable|image',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'description.required' => 'Deskripsi wajib diisi.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
-            'image.required' => 'Gambar wajib diunggah.',
-            'image.image' => 'File yang diunggah harus berupa gambar.',
             'user_id.required' => 'User tidak boleh kosong.',
             'user_id.exists' => 'User tidak valid.',
+            'phone.required' => 'Phone wajib diisi.',
+            'phone.numeric' => 'Phone harus diisi angkas.',
+            'image.image' => 'File harus berupa gambar.',
         ]);
 
         $input = $request->all();
@@ -124,6 +126,7 @@ class UmkmController extends Controller
             'title' => 'required',
             'description' => 'required|max:500',
             'user_id' => 'required|exists:users,id',
+            'phone' => 'required|numeric',
             'image' => 'nullable|image',
         ], [
             'title.required' => 'Judul wajib diisi.',
@@ -131,12 +134,15 @@ class UmkmController extends Controller
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
             'user_id.required' => 'User tidak boleh kosong.',
             'user_id.exists' => 'User tidak valid.',
+            'phone.required' => 'Phone wajib diisi.',
+            'phone.numeric' => 'Phone harus diisi angkas.',
             'image.image' => 'File harus berupa gambar.',
         ]);
 
         $umkm->title = $request->title;
         $umkm->description = $request->description;
         $umkm->user_id = $request->user_id;
+        $umkm->phone = $request->phone;
 
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
@@ -172,6 +178,7 @@ class UmkmController extends Controller
             'title' => 'required',
             'description' => 'required|max:500',
             'user_id' => 'required|exists:users,id',
+            'phone' => 'required|numeric',
             'image' => 'nullable|image',
         ], [
             'title.required' => 'Judul wajib diisi.',
@@ -179,12 +186,15 @@ class UmkmController extends Controller
             'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
             'user_id.required' => 'User tidak boleh kosong.',
             'user_id.exists' => 'User tidak valid.',
+            'phone.required' => 'Phone wajib diisi.',
+            'phone.numeric' => 'Phone harus diisi angkas.',
             'image.image' => 'File harus berupa gambar.',
         ]);
 
         $umkm->title = $request->title;
         $umkm->description = $request->description;
         $umkm->user_id = $request->user_id;
+        $umkm->phone = $request->phone;
 
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada

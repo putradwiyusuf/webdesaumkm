@@ -30,7 +30,7 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(10)->withQueryString();
-            // $umkms = Umkm::all(); // untuk filter dropdown
+        // $umkms = Umkm::all(); // untuk filter dropdown
 
         // UMKM hanya ditampilkan jika admin atau superadmin
         $umkms = $user->level === 'user'? $user->umkms : Umkm::all();
