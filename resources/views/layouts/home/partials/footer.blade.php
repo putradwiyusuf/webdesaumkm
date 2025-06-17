@@ -35,7 +35,7 @@
   </div>
   <div class="container text-center">
     <div class="copyright">
-      &copy; Copyright <strong><span>Human</span></strong>.
+      &copy; Copyright <strong><span>KMSIT</span></strong>.
     </div>
   </div>
 </footer>

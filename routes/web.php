@@ -16,6 +16,10 @@ Route::get('/galeri', [HomeController::class, 'galeri']);
 Route::get('/datadesa', [HomeController::class, 'data']);
 Route::get('/berita', [HomeController::class, 'news']);
 Route::get('/sotk', [HomeController::class, 'perangkat']);
+Route::post('/product/{id}/click', [ProductController::class, 'incrementClick']);// web.php
+Route::get('/product/{product}', [HomeController::class, 'product'])->name('product.show');
+
+
 
 // Halaman login
 Route::get('/login', [AuthController::class, 'login'])->name('login');

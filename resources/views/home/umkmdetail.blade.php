@@ -21,7 +21,10 @@
           <h3 class="font-weight-bold mb-1">{{ $umkm->title }}</h3>
           <p class="text-muted">{{ $umkm->description }}</p>
           <p class="text-secondary small">
-          <i class="fas fa-box-open"></i> {{ $umkm->products->count() }} Produk Tersedia
+            <i class="fas fa-box-open"></i> {{ $umkm->products->count() }} Produk Tersedia
+          </p>
+          <p class="text-secondary small">
+            <i class="fas fa-hand-pointer"></i> Produk Dilihat: {{ $umkm->products->sum('click_count') }} kali
           </p>
         </div>
       </div>
@@ -29,26 +32,53 @@
 
     <!-- {{-- Produk --}} -->
     @if($umkm->products->count())
-    <h4 class="mb-4 font-weight-bold text-uppercase">Produk dari Toko Ini</h4>
-    <div class="row">
-      @foreach($umkm->products as $product)
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 shadow-sm border-0 hover-shadow">
-            <img src="{{ asset('image/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title font-weight-bold">{{ $product->name }}</h5>
-              <p class="text-muted small">{{ $product->description }}</p>
-              <div class="mt-auto">
-                <span class="text-primary font-weight-bold h6">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-              </div>
+    <section id="featured-services" class="featured-services">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Produk Dari UMKM Ini</h2>
+        </div>
+
+        <div class="row">
+          @foreach($umkm->products as $product)
+          <div class="col-md-3 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+              <a href="{{ route('product.show', $product->id) }}" onclick="increaseClick('{{ $product->id }}')">
+                <div class="member-img">
+                  <img src="{{ asset('image/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                  <!-- Jumlah klik di pojok kanan bawah -->
+                  <span class="position-absolute bottom-0 end-0 bg-dark text-white px-2 py-1 small rounded-start">
+                    {{ $product->click_count }} klik
+                  </span>
+                  <div class="">
+                    <h5 class="title font-weight-bold text-warning">{{ $product->name }}</h5>
+                    <p class="description">{{ $product->description }}</p>
+                    <div class="mt-auto">
+                      <span class="text-danger font-weight-bold h6">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                    </div>
+                  </div>
+                </a>
             </div>
           </div>
         </div>
-      @endforeach
-    </div>
-    @else
+        @endforeach
+      </div>
+      @else
       <p class="text-muted">Belum ada produk dari toko ini.</p>
-    @endif
+      @endif
   </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+  function increaseClick(id) {
+    fetch(`/product/${id}/click`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+</script>
+@endpush

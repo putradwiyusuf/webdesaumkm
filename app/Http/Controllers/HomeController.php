@@ -13,6 +13,7 @@ use App\Models\Umkm;
 use App\Models\Slider;
 use App\Models\Data;
 use App\Models\Galeri;
+use App\Models\Product;
 use App\Models\Sambutan;
 use App\Models\Service;
 use App\Models\Testimoni;
@@ -29,6 +30,7 @@ class HomeController extends Controller
         $sambutan = Sambutan::all();
         $service = Service::all();
         $testimoni = Testimoni::all();
+        $product = Product::all();
 
         return view('home.index', compact(
             'sliders',
@@ -60,6 +62,11 @@ class HomeController extends Controller
 
     public function umkmDetail(Umkm $umkm)
     {
+        $umkm->load([
+            'products' => function ($query) {
+                $query->orderByDesc('click_count');
+            }
+        ]);
         return view('home.umkmdetail', compact('umkm'));
     }
 
@@ -86,6 +93,11 @@ class HomeController extends Controller
         return view('profil.sotk',compact(
             'perangkat',
         ));
+    }
+    public function product(Product $product)
+    {
+        $product->load('umkm');
+        return view('home.product', compact('product'));
     }
 
 }

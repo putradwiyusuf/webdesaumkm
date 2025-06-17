@@ -147,4 +147,35 @@ class ProductController extends Controller
 
         return view('products.index', compact('products'));
     }
+
+    public function incrementClick($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->increment('click_count');
+        return response()->json(['success' => true]);
+    }
+
+    public function export()
+    {
+        // Implementasi ekspor produk ke format yang diinginkan (misalnya CSV, Excel)
+        // ...
+    }
+
+    public function import(Request $request)
+    {
+        // Implementasi impor produk dari file yang diunggah
+        // ...
+    }
+
+    public function getUmkmProducts($umkmId)
+    {
+        $products = Product::where('umkm_id', $umkmId)->get();
+        return response()->json($products);
+    }
+    
+    public function getProductById($id)
+    {
+        $product = Product::findOrFail($id);
+        return response()->json($product);
+    }
 }
