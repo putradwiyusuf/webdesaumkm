@@ -23,7 +23,7 @@
                 @php $user = auth()->user(); @endphp
 
                 @if ($user->level === 'user')
-                <input type="hidden" name="umkm_id" value="{{ $user->umkms->first()->id ?? '' }}">
+                <input type="hidden" name="umkm_id" value="{{ $user->umkm->id ?? '' }}">
                 @else
                 <div class="form-group">
                     <label for="umkm_id">Pilih UMKM</label>

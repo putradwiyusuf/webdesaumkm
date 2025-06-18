@@ -44,9 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function umkms()
+    public function umkm()
     {
-        return $this->hasMany(Umkm::class);
+        return $this->hasOne(Umkm::class);
     }
 
 }

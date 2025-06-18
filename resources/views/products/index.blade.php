@@ -9,9 +9,9 @@
 
     <!-- {{-- Alert sukses --}} -->
     @if ($message = Session::get('message'))
-        <div class="alert alert-success">
-            <strong>Berhasil!</strong> {{ $message }}
-        </div>
+    <div class="alert alert-success">
+        <strong>Berhasil!</strong> {{ $message }}
+    </div>
     @endif
 
     <!-- {{-- Form Filter --}} -->
@@ -29,17 +29,17 @@
                 @endforeach
             </select>
         </div> -->
-        @if(auth()->user()->level !== 'user')
-            <div class="col-md-4">
-                <select name="umkm_id" class="form-control">
-                    <option value="">-- Semua UMKM --</option>
-                    @foreach ($umkms as $umkm)
-                        <option value="{{ $umkm->id }}" {{ request('umkm_id') == $umkm->id ? 'selected' : '' }}>
-                            {{ $umkm->title }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        @if($umkms->isNotEmpty())
+        <div class="col-md-4">
+            <select name="umkm_id" class="form-control">
+                <option value="">-- Semua UMKM --</option>
+                @foreach ($umkms as $umkm)
+                <option value="{{ $umkm->id }}" {{ request('umkm_id') == $umkm->id ? 'selected' : '' }}>
+                    {{ $umkm->title }}
+                </option>
+                @endforeach
+            </select>
+        </div>
         @endif
         <div class="col-md-4 d-flex gap-2">
             <button type="submit" class="btn btn-primary w-100">Filter</button>
@@ -70,33 +70,35 @@
                 </thead>
                 <tbody>
                     @forelse ($products as $index => $product)
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="selected[]" value="{{ $product->id }}" class="select-item">
-                            </td>
-                            <td>{{ $products->firstItem() + $index }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->umkm->title ?? '-' }}</td>
-                            <td>{{ $product->description }}</td>
-                            <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                            <td>
-                                @if ($product->image)
-                                    <img src="{{ asset('image/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid" width="80">
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm mt-1"
-                                        onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus Produk</button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selected[]" value="{{ $product->id }}" class="select-item">
+                        </td>
+                        <td>{{ $products->firstItem() + $index }}</td>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->umkm->title ?? '-' }}</td>
+                        <td>{{ $product->description }}</td>
+                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td>
+                            @if ($product->image)
+                            <img src="{{ asset('image/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid" width="80">
+                            @else
+                            <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm mt-1"
+                                    onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus Produk</button>
+                            </form>
+                        </td>
+                    </tr>
                     @empty
-                        <tr><td colspan="8" class="text-center text-muted">Data produk tidak ditemukan.</td></tr>
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">Data produk tidak ditemukan.</td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
@@ -118,7 +120,7 @@
 @push('scripts')
 <script>
     // Select all checkbox
-    document.getElementById('select-all').addEventListener('change', function () {
+    document.getElementById('select-all').addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('.select-item');
         checkboxes.forEach(cb => cb.checked = this.checked);
     });

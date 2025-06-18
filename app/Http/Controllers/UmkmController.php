@@ -27,7 +27,10 @@ class UmkmController extends Controller
      */
     public function create()
     {
-        $users = User::where('level', 'user')->get();
+        $users = User::where('level', 'user')
+            ->whereDoesntHave('umkm')
+            ->get();
+
         return view('umkm.create', compact('users'));
     }
 
@@ -59,9 +62,9 @@ class UmkmController extends Controller
         $input = $request->all();
 
         // Cek jika user sudah punya UMKM
-        // if (Umkm::where('user_id', $request->user_id)->exists()) {
-        //     return back()->withErrors(['user_id' => 'User ini sudah memiliki UMKM.'])->withInput();
-        // }
+        if (Umkm::where('user_id', $request->user_id)->exists()) {
+            return back()->withErrors(['user_id' => 'User ini sudah memiliki UMKM.'])->withInput();
+        }
 
         if ($image = $request->file('image')) {
             $destinationPath = 'image/';
@@ -95,9 +98,13 @@ class UmkmController extends Controller
      */
     public function edit($umkm)
     {
-        $umkm = Umkm::findOrFail($umkm);
-        $users = User::where('level', 'user')->get(); // hanya ambil user biasa
-
+        $umkm = Umkm::findOrFail($umkm);   
+        $users = User::where('level', 'user')
+        ->where(function ($query) use ($umkm) {
+            $query->whereDoesntHave('umkm')
+                  ->orWhere('id', $umkm->user_id);
+        })
+        ->get();
         return view('umkm.edit', compact('umkm', 'users'));
     }
 
@@ -110,8 +117,8 @@ class UmkmController extends Controller
     public function editByUser()
     {
         $umkm = Umkm::where('user_id', auth()->id())->firstOrFail();
-        $users = User::where('id', auth()->id())->get(); // hanya ambil user biasa
-        return view('umkm.edit', compact('umkm','users'));
+        $users = User::where('id', auth()->id())->get();
+        return view('umkm.edit', compact('umkm', 'users'));
     }
     /**
      * Update the specified resource in storage by user.

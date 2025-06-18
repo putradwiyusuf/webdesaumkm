@@ -33,7 +33,8 @@ class ProductController extends Controller
         // $umkms = Umkm::all(); // untuk filter dropdown
 
         // UMKM hanya ditampilkan jika admin atau superadmin
-        $umkms = $user->level === 'user'? $user->umkms : Umkm::all();
+        $umkms = in_array($user->level, ['admin', 'superadmin']) ? Umkm::all() : collect();
+
 
         return view('products.index', compact('products', 'umkms'));
     }
@@ -42,9 +43,9 @@ class ProductController extends Controller
     {
         $user = auth()->user();
 
-        $umkms = $user->level === 'user'
-            ? $user->umkms : Umkm::all();
-        return view('products.create', compact('umkms'));
+        $umkms = in_array($user->level, ['admin', 'superadmin']) ? Umkm::all() : collect();
+
+        return view('products.create', compact('umkms', 'user'));
     }
 
     public function store(Request $request)
@@ -186,7 +187,7 @@ class ProductController extends Controller
         $products = Product::where('umkm_id', $umkmId)->get();
         return response()->json($products);
     }
-    
+
     public function getProductById($id)
     {
         $product = Product::findOrFail($id);
