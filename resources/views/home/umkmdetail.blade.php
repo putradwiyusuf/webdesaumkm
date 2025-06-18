@@ -41,44 +41,50 @@
 
         <div class="row">
           @foreach($umkm->products as $product)
-          <div class="col-md-3 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-md-3 mb-4 d-flex align-items-stretch">
+            <div class="icon-box w-100 p-3 shadow-sm d-flex flex-column">
               <a href="{{ route('product.show', $product->id) }}" onclick="increaseClick('{{ $product->id }}')">
-                <div class="member-img">
-                  <img src="{{ asset('image/'.$product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
-                  <!-- Jumlah klik di pojok kanan bawah -->
+                <div class="member-img position-relative" style="height: 200px; overflow: hidden; border-radius: 10px;">
+                  <img src="{{ asset('image/' . $product->image) }}"
+                    class="img-fluid w-100"
+                    alt="{{ $product->name }}"
+                    style="height: 100%; object-fit: cover;">
+
                   <span class="position-absolute bottom-0 end-0 bg-dark text-white px-2 py-1 small rounded-start">
                     {{ $product->click_count }} klik
                   </span>
-                  <div class="">
-                    <h5 class="title font-weight-bold text-warning">{{ $product->name }}</h5>
-                    <p class="description">{{ $product->description }}</p>
-                    <div class="mt-auto">
-                      <span class="text-danger font-weight-bold h6">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                    </div>
+                </div>
+
+                <div class="mt-3">
+                  <h5 class="title font-weight-bold text-warning mb-1">{{ $product->name }}</h5>
+                  <p class="description mb-2" style="min-height: 48px;">{{ Str::limit($product->description, 60) }}</p>
+                  <div class="mt-auto">
+                    <span class="text-danger font-weight-bold h6">
+                      Rp {{ number_format($product->price, 0, ',', '.') }}
+                    </span>
                   </div>
-                </a>
+                </div>
+              </a>
             </div>
           </div>
+          @endforeach
         </div>
-        @endforeach
+        @else
+        <p class="text-muted">Belum ada produk dari toko ini.</p>
+        @endif
       </div>
-      @else
-      <p class="text-muted">Belum ada produk dari toko ini.</p>
-      @endif
-  </div>
-</section>
-@endsection
-@push('scripts')
-<script>
-  function increaseClick(id) {
-    fetch(`/product/${id}/click`, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-        'Content-Type': 'application/json'
+    </section>
+    @endsection
+    @push('scripts')
+    <script>
+      function increaseClick(id) {
+        fetch(`/product/${id}/click`, {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+          }
+        });
       }
-    });
-  }
-</script>
-@endpush
+    </script>
+    @endpush
