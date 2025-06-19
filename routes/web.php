@@ -65,7 +65,7 @@ Route::prefix('informasi')->group(function () {
     Route::view('/beranda', 'home.index');
     Route::view('/kk', 'home.kk');
     Route::view('/aktekelahiran', 'home.aktekelahiran');
-    Route::view('/aktekematian', 'home.informasi');
+    Route::view('/aktekematian', 'home.aktekematian');
     Route::view('/pindahdomisili', 'home.pindahdomisili');
     Route::view('/izinkeramaian', 'home.izinkeramaian');
     Route::view('/ktp', 'home.ktp');
