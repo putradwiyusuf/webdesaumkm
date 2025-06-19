@@ -58,18 +58,41 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="image">Gambar Produk</label>
-                    <input type="file" name="image" class="form-control">
-                    @if ($product->image)
-                    <div class="mt-2">
-                        <p>Gambar saat ini:</p>
-                        <img src="{{ asset('image/' . $product->image) }}" width="120">
-                    </div>
-                    @endif
-                    @error('image')
-                    <br><small class="text-danger">{{ $message }}</small>
+                    <label for="images">Upload Gambar Baru:</label>
+                    <input type="file" name="images[]" id="images" multiple onchange="previewImages()" class="form-control">
+                    <div id="imagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+
+                    <input type="hidden" name="main_image_index" id="main_image_index" value="0">
+                    <small class="text-muted d-block mt-1">Klik gambar untuk jadikan gambar utama (border kuning)</small>
+
+                    @error('images')
+                    <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+
+                <div class="form-group mt-3">
+                    <p>Gambar Lama:</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach ($product->images as $image)
+                        <div class="position-relative">
+                            <img src="{{ asset('image/' . $image->image_path) }}"
+                                class="img-preview {{ $image->is_main ? 'active' : '' }}"
+                                alt="gambar" width="80" height="80">
+
+                            <div class="form-check mt-1">
+                                <input type="radio" name="existing_main_image_id" value="{{ $image->id }}" {{ $image->is_main ? 'checked' : '' }}>
+                                <label class="form-check-label">Gambar Utama</label>
+                            </div>
+
+                            <div class="form-check mt-1">
+                                <input type="checkbox" name="delete_image_ids[]" value="{{ $image->id }}">
+                                <label class="form-check-label text-danger">Hapus</label>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
 
                 <button type="submit" class="btn btn-primary">Update Produk</button>
             </form>
@@ -80,11 +103,60 @@
 
 @push('scripts')
 <script>
+    let selectedMainIndex = 0;
+
     function updateCount() {
         const textarea = document.querySelector('textarea[name="description"]');
         const countDisplay = document.getElementById('charCount');
         countDisplay.textContent = `${textarea.value.length} / 250 karakter`;
     }
     document.addEventListener("DOMContentLoaded", updateCount);
+
+    function previewImages() {
+        const input = document.getElementById('images');
+        const preview = document.getElementById('imagePreview');
+
+        if (!input || !preview || !input.files) return;
+
+        const files = Array.from(input.files);
+        preview.innerHTML = ''; // kosongkan dulu
+
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-preview' + (index === selectedMainIndex ? ' active' : '');
+                img.title = "Klik untuk jadikan gambar utama";
+
+                img.addEventListener('click', () => {
+                    selectedMainIndex = index;
+                    document.getElementById('main_image_index').value = index;
+                    previewImages(); // refresh ulang tampilan
+                });
+
+                preview.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    .img-preview {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .img-preview.active {
+        border: 3px solid orange !important;
+    }
+</style>
 @endpush

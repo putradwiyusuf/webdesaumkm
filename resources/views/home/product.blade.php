@@ -7,7 +7,39 @@
     <div class="row">
         <!-- Gambar Produk -->
         <div class="col-md-5">
-            <img src="{{ asset('image/' . $product->image) }}" class="img-fluid rounded mb-3" alt="Gambar Produk">
+            @if ($product->images->count())
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach ($product->images as $key => $image)
+                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                        <div class="ratio ratio-1x1"> {{-- atau gunakan ratio-4x3 jika ingin tidak persegi --}}
+                            <img src="{{ asset('image/' . $image->image_path) }}"
+                                class="w-100 h-100 object-fit-cover rounded"
+                                alt="Gambar Produk">
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+
+            <!-- Thumbnail -->
+            <div class="d-flex justify-content-center mt-2 gap-2">
+                @foreach ($product->images as $key => $image)
+                <img src="{{ asset('image/' . $image->image_path) }}"
+                    class="img-thumbnail"
+                    style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;"
+                    onclick="setActiveSlide('{{ $key }}')">
+                @endforeach
+            </div>
+            @else
+            <img src="{{ asset('image/default.jpg') }}" class="img-fluid rounded mb-3" alt="Gambar Produk Default">
+            @endif
         </div>
 
         <!-- Informasi Produk -->
@@ -72,6 +104,15 @@
         current += change;
         if (current < 1) current = 1;
         input.value = current;
+    }
+
+    // Add this function to control the carousel slide
+    function setActiveSlide(index) {
+        var carousel = document.getElementById('productCarousel');
+        if (carousel) {
+            var bsCarousel = bootstrap.Carousel.getInstance(carousel) || new bootstrap.Carousel(carousel);
+            bsCarousel.to(index);
+        }
     }
 </script>
 @endpush

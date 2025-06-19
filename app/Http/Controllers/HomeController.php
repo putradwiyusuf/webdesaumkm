@@ -33,7 +33,7 @@ class HomeController extends Controller
         $sambutan = Sambutan::all();
         $service = Service::all();
         $testimoni = Testimoni::all();
-        $products = Product::orderBy('click_count', 'desc')->take(10)->get();
+        $products = Product::orderBy('click_count', 'desc')->take(8)->get();
 
         return view('home.index', compact(
             'sliders',

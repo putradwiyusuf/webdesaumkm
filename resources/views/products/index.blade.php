@@ -80,8 +80,13 @@
                         <td>{{ $product->description }}</td>
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                         <td>
-                            @if ($product->image)
-                            <img src="{{ asset('image/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid" width="80">
+                            @php
+                            $mainImage = $product->mainImage ?? $product->images->first();
+                            @endphp
+
+                            @if ($mainImage)
+                            <img src="{{ asset('image/' . ($mainImage->image_path)) }}"
+                                class="image-square" alt="Produk">
                             @else
                             <span class="text-muted">-</span>
                             @endif
@@ -126,3 +131,13 @@
     });
 </script>
 @endpush
+
+@push('styles')
+<style>
+    .image-square {
+        width: 100px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+</style>

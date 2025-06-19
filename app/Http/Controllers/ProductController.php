@@ -54,28 +54,39 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:250',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
-            'umkm_id' => 'required|exists:umkms,id'
+            'images' => 'required|array',
+            'images.*' => 'image|max:2048',
+            'umkm_id' => 'required|exists:umkms,id',
         ], [
             'name.required' => 'Judul wajib diisi.',
             'description.required' => 'Deskripsi wajib diisi.',
-            'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 250 karakter.',
             'price.required' => 'Harga wajib diisi.',
             'umkm_id.required' => 'UMKM tidak boleh kosong.',
             'umkm_id.exists' => 'UMKM tidak valid.',
-            'image.image' => 'File harus berupa gambar.',
+            'images.required' => 'Minimal satu gambar harus diupload.',
+            'images.*.image' => 'Setiap file harus berupa gambar.',
+            'images.*.max' => 'Ukuran gambar maksimal 2MB per file.',
         ]);
 
         $data = $request->only(['name', 'description', 'price', 'umkm_id']);
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('image'), $filename);
-            $data['image'] = $filename;
-        }
+        $product = Product::create($data);
 
-        Product::create($data);
+        // Simpan semua gambar ke tabel product_images
+        if ($request->hasFile('images')) {
+            $mainIndex = (int) $request->input('main_image_index', 0);
+
+            foreach ($request->file('images') as $index => $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('image'), $filename);
+
+                $product->images()->create([
+                    'image_path' => $filename,
+                    'is_main' => $index === $mainIndex,
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('message', 'Produk berhasil ditambahkan');
     }
@@ -101,35 +112,55 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:250',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'umkm_id' => 'required|exists:umkms,id',
         ], [
             'name.required' => 'Judul wajib diisi.',
-            'description.required' => 'Deskripsi wajib diisi.',
-            'description.max' => 'Deskripsi tidak boleh lebih dari 500 karakter.',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 250 karakter.',
             'price.required' => 'Harga wajib diisi.',
             'umkm_id.required' => 'UMKM tidak boleh kosong.',
             'umkm_id.exists' => 'UMKM tidak valid.',
-            'image.image' => 'File harus berupa gambar.',
+            'images.*.image' => 'Setiap file harus berupa gambar.',
         ]);
 
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->umkm_id = $request->umkm_id;
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'umkm_id' => $request->umkm_id,
+        ]);
 
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($product->image && file_exists(public_path('image/' . $product->image))) {
-                unlink(public_path('image/' . $product->image));
+        // Hapus gambar lama yang dicentang untuk dihapus
+        if ($request->filled('delete_image_ids')) {
+            foreach ($request->delete_image_ids as $imageId) {
+                $image = $product->images()->find($imageId);
+                if ($image) {
+                    @unlink(public_path('image/' . $image->image_path));
+                    $image->delete();
+                }
             }
-
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->move(public_path('image'), $imageName);
-            $product->image = $imageName;
         }
 
-        $product->save();
+        // Upload gambar baru
+        if ($request->hasFile('images')) {
+            $mainIndex = (int) $request->input('main_image_index', 0);
+
+            foreach ($request->file('images') as $index => $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('image'), $filename);
+
+                $product->images()->create([
+                    'image_path' => $filename,
+                    'is_main' => $index === $mainIndex && !$request->has('existing_main_image_id'),
+                ]);
+            }
+        }
+
+        // Set gambar utama (dari gambar lama)
+        if ($request->filled('existing_main_image_id')) {
+            $product->images()->update(['is_main' => false]);
+            $product->images()->where('id', $request->existing_main_image_id)->update(['is_main' => true]);
+        }
 
         return redirect()->route('products.index')->with('message', 'Produk berhasil diperbarui!');
     }

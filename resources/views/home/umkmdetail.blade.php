@@ -41,11 +41,14 @@
 
         <div class="row">
           @foreach($umkm->products as $product)
+          @php
+          $mainImage = $product->mainImage ?? $product->images->first();
+          @endphp
           <div class="col-md-3 mb-4 d-flex align-items-stretch">
             <div class="icon-box w-100 p-3 shadow-sm d-flex flex-column">
               <a href="{{ route('product.show', $product->id) }}" onclick="increaseClick('{{ $product->id }}')">
                 <div class="member-img position-relative" style="height: 200px; overflow: hidden; border-radius: 10px;">
-                  <img src="{{ asset('image/' . $product->image) }}"
+                  <img src="{{ asset('image/' . ($mainImage?->image_path ?? $product->images->first())) }}"
                     class="img-fluid w-100"
                     alt="{{ $product->name }}"
                     style="height: 100%; object-fit: cover;">

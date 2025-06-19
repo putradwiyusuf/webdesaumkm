@@ -65,8 +65,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="image">Gambar Produk</label>
-                    <input type="file" class="form-control" name="image">
+                    <label for="images">Upload Gambar Produk:</label>
+                    <input type="file" name="images[]" id="images" multiple onchange="previewImages()" class="form-control">
+
+                    <div id="imagePreview" class="d-flex flex-wrap gap-2"></div>
+
+                    <input type="hidden" name="main_image_index" id="main_image_index" value="0">
+                    <small class="text-muted d-block mt-1">Klik gambar untuk menjadikannya gambar utama (border kuning)</small>
                     @error('image')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
@@ -84,6 +89,8 @@
 
 @push('scripts')
 <script>
+    let selectedMainIndex = 0;
+
     function updateCount() {
         const textarea = document.getElementById('description');
         const countDisplay = document.getElementById('charCount');
@@ -91,5 +98,54 @@
     }
 
     document.addEventListener("DOMContentLoaded", updateCount);
+
+    function previewImages() {
+        const input = document.getElementById('images');
+        const preview = document.getElementById('imagePreview');
+
+        if (!input || !preview || !input.files) return;
+
+        const files = Array.from(input.files);
+        preview.innerHTML = ''; // kosongkan dulu
+
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-preview' + (index === selectedMainIndex ? ' active' : '');
+                img.title = "Klik untuk jadikan gambar utama";
+
+                img.addEventListener('click', () => {
+                    selectedMainIndex = index;
+                    document.getElementById('main_image_index').value = index;
+                    previewImages(); // refresh ulang tampilan
+                });
+
+                preview.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
 </script>
+
+@endpush
+@push('styles')
+<style>
+.img-preview {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+}
+
+.img-preview.active {
+    border: 3px solid orange;
+}
+</style>
+    
 @endpush
